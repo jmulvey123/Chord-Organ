@@ -13,26 +13,47 @@
 // #define DEBUG_MODE
 // #define CHECK_CPU
 
-#define CHORD_POT_PIN 9 // pin for Chord pot
-#define CHORD_CV_PIN 6 // pin for Chord CV 
-#define ROOT_POT_PIN 7 // pin for Root Note pot
-#define ROOT_CV_PIN 8 // pin for Root Note CV
-#define RESET_BUTTON 8 // Reset button 
-#define RESET_LED 11 // Reset LED indicator 
+//#define CHORD_POT_PIN 9 // pin for Chord pot
+#define CHORD_POT_PIN A0 // pin for Chord pot
+
+//#define CHORD_CV_PIN 6 // pin for Chord CV
+#define CHORD_CV_PIN A1 // pin for Chord CV
+
+//#define ROOT_POT_PIN 7 // pin for Root Note pot
+#define ROOT_POT_PIN A5 // pin for Root Note pot
+
+//#define ROOT_CV_PIN 8 // pin for Root Note CV
+#define ROOT_CV_PIN A8 // pin for Root Note CV
+
+#define RESET_BUTTON 8 // Reset button
+
+//#define RESET_LED 11 // Reset LED indicator
+#define RESET_LED 6 // Reset LED indicator
+
 #define RESET_CV 9 // Reset pulse in / out
-#define BANK_BUTTON 2 // Bank Button 
-#define LED0 6
-#define LED1 5
+
+// Is BANK_BUTTON unused?
+//#define BANK_BUTTON 2 // Bank Button
+
+// #define LED0 6
+#define LED0 2
+// #define LED1 5
+#define LED1 3
 #define LED2 4
-#define LED3 3
+// #define LED3 3
+#define LED3 5
 
 // REBOOT CODES 
 #define RESTART_ADDR       0xE000ED0C
 #define READ_RESTART()     (*(volatile uint32_t *)RESTART_ADDR)
 #define WRITE_RESTART(val) ((*(volatile uint32_t *)RESTART_ADDR) = (val))
 
-#define ADC_BITS 13
-#define ADC_MAX_VAL 8192
+//#define ADC_BITS 13
+#define ADC_BITS 10
+
+//#define ADC_MAX_VAL 8192
+#define ADC_MAX_VAL (1 << ADC_BITS)
+
 #define CHANGE_TOLERANCE 64
 
 #define SINECOUNT 8
@@ -177,7 +198,9 @@ AudioMixer4              mixer1;         //xy=424,117
 AudioMixer4              mixer2;         //xy=424,181
 AudioMixer4              mixer3;         //xy=571,84
 AudioEffectEnvelope      envelope1;      //xy=652,281
-AudioOutputAnalog        dac1;           //xy=784,129
+
+//AudioOutputAnalog        dac1;           //xy=784,129
+AudioOutputPT8211        dac1;
 AudioConnection          patchCord1(waveform1, 0, mixer1, 0);
 AudioConnection          patchCord2(waveform2, 0, mixer1, 1);
 AudioConnection          patchCord7(waveform3, 0, mixer1, 2);
@@ -197,8 +220,9 @@ AudioSynthWaveform* oscillator[8];
 Settings settings("CHORDORG.TXT");
 
 void setup(){
-    pinMode(BANK_BUTTON,INPUT);
-    pinMode(RESET_BUTTON, INPUT);
+    // Is BANK_BUTTON usused?
+    //pinMode(BANK_BUTTON,INPUT);
+    pinMode(RESET_BUTTON, INPUT_PULLUP);
     pinMode(RESET_CV, INPUT); 
     pinMode(RESET_LED, OUTPUT);
     pinMode(LED0,OUTPUT);
